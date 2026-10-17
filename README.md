@@ -1,165 +1,171 @@
-<div align="center">
+# Piper-RU
 
-# 🎙️ Piper Local TTS Web UI
-
-**[🇷🇺 Русский](#-русский) | [🇬🇧 English](#-english)**
-
-Fast, local, and private neural text-to-speech web interface with CPU & GPU (NVIDIA CUDA) acceleration and public Gradio share support.
-
-</div>
+[Русский](#русский) | [English](#english)
 
 ---
 
-<a name="-русский"></a>
-## 🇷🇺 Русский
+## Русский
 
-Локальный веб-интерфейс для нейросетевого синтеза речи (Text-to-Speech) на базе движка **Piper** (архитектура **VITS** + **ONNX Runtime**).
+Веб-интерфейс (WebUI) для локального нейросетевого синтеза речи (Text-to-Speech) **Piper** на базе архитектуры **VITS** и **ONNX Runtime** с поддержкой инференса на **CPU** и аппаратного ускорения **GPU (NVIDIA CUDA)**.
 
-Работает полностью автономно на вашем компьютере, без отправки данных на сторонние серверы. Поддерживает инференс как на процессоре (**CPU**), так и с аппаратным ускорением на видеокартах **NVIDIA (CUDA)**.
+### Возможности
 
-### ✨ Основные возможности
-* **Быстрый старт в 1 клик**: `start.bat` сам создаёт виртуальное окружение `.venv`, ставит зависимости и запускает веб-сервер.
-* **Переключение CPU / GPU**: удобный переключатель прямо в интерфейсе с автоматическим fallback на CPU при отсутствии CUDA.
-* **Публичная ссылка (Gradio Share)**: возможность мгновенно открыть доступ к веб-интерфейсу с телефона или для друзей по безопасной ссылке `https://xxxx.gradio.live`.
-* **Автозагрузка моделей**: выбор любого голоса из списка автоматически скачивает нужные веса с Hugging Face.
-* **Тонкая настройка**: ползунки скорости, вариативности интонации (`noise_scale`) и длительности пауз (`noise_w_scale`).
+- **Выбор голосов и автозагрузка:**
+  - Готовые русские голоса: **Dmitri** (мужской), **Irina** (женский), **Ruslan** (мужской), **Denis** (мужской).
+  - Английский голос: **Lessac** (женский).
+  - Автоматическая загрузка моделей (`.onnx` и `.onnx.json`) с Hugging Face при выборе из списка.
+  - Поддержка подключения любых сторонних моделей Piper (более 170 голосов на 40+ языках).
+- **Аппаратное ускорение (CPU / GPU):**
+  - Поддержка инференса на процессоре (**CPU**) и графических ускорителях **NVIDIA (CUDA)** через `onnxruntime-gpu`.
+  - Переключение устройства на лету в интерфейсе с автоматическим fallback на CPU при отсутствии CUDA.
+- **Тонкая настройка синтеза:**
+  - Скорость речи (длина фонем).
+  - Вариативность интонации (`noise_scale`).
+  - Вариативность длительности звуков и пауз (`noise_w_scale`).
+- **Публичный доступ:**
+  - Автоматическое создание публичной ссылки Gradio (share link) для удаленного доступа с мобильных устройств или из сети.
+- **Быстрый запуск:**
+  - Скрипт `start.bat` для запуска в один клик под Windows с автоматическим созданием виртуального окружения `.venv`, установкой зависимостей и скачиванием базовой модели.
 
----
+### Быстрый старт (Windows)
 
-### 🚀 Быстрый старт
+1. Клонируйте репозиторий:
+```bash
+git clone https://github.com/Daler-Karimov/Piper-RU.git
+cd Piper-RU
+```
 
-Просто дважды кликните по файлу:
-
-```text
+2. Запустите батник:
+```cmd
 start.bat
 ```
+При первом запуске скрипт автоматически создаст виртуальное окружение `.venv`, установит все необходимые зависимости из `requirements.txt`, загрузит базовый русский голос (`ru_RU-dmitri-medium`) и откроет веб-интерфейс в браузере.
 
-Скрипт автоматически:
-1. Проверит наличие Python в системе (требуется 3.9+).
-2. Создаст изолированное виртуальное окружение (`.venv`).
-3. Установит все необходимые библиотеки из `requirements.txt`.
-4. Скачает базовую русскую модель голоса (`ru_RU-dmitri-medium`), если она отсутствует.
-5. Запустит веб-сервер, создаст **публичную ссылку Gradio** (`https://xxxx.gradio.live`) и откроет страницу в браузере.
-
----
-
-### 🗂️ Структура проекта
-
-```text
-Piper/
-├── start.bat          # Скрипт запуска и первоначальной настройки
-├── app.py             # Приложение веб-интерфейса на Gradio
-├── requirements.txt   # Зависимости Python (piper-tts, onnxruntime-gpu, gradio)
-├── README.md          # Документация проекта (RU / EN)
-├── .venv/             # Изолированное виртуальное окружение Python
-└── voices/            # Папка с моделями голосов (.onnx и .json)
-    ├── ru_RU-dmitri-medium.onnx
-    ├── ru_RU-dmitri-medium.onnx.json
-    └── ...
+3. Веб-интерфейс будет доступен по локальному адресу и по публичной ссылке:
+```
+Локально: http://127.0.0.1:7860
+Публично: https://xxxx.gradio.live (ссылка выводится в окне консоли)
+```
+Для запуска только локально (без публичной ссылки) используйте:
+```cmd
+start.bat --no-share
 ```
 
----
+### Параметры моделей и производительность
 
-### 🗣️ Поддерживаемые голоса
+- **Архитектура:** VITS (Variational Inference with adversarial learning for end-to-end Text-to-Speech).
+- **Формат весов:** ONNX (FP32).
+- **Количество параметров:** ~28-30 млн параметров (качество Medium).
+- **Размер файла весов:** ~60-65 МБ на одну модель голоса.
+- **Потребление памяти:** ~150-300 МБ RAM / VRAM.
+- **Скорость генерации:** ~0.05-0.15 сек на аудиофрагмент (RTF < 0.05 на современных GPU NVIDIA).
 
-В интерфейсе предустановлены:
-* **Русские голоса**:
-  * `ru_RU-dmitri-medium` (мужской)
-  * `ru_RU-irina-medium` (женский)
-  * `ru_RU-ruslan-medium` (мужской)
-  * `ru_RU-denis-medium` (мужской)
-* **Английский голос**:
-  * `en_US-lessac-medium` (женский)
+### Добавление новых голосов
 
-> 💡 **Добавление других языков:** вы можете скачать любые из 170+ голосов на 40+ языках из официального каталога [rhasspy/piper-voices на Hugging Face](https://huggingface.co/rhasspy/piper-voices/tree/main). Достаточно положить два файла (`.onnx` и `.onnx.json`) в папку `voices/`.
+Вы можете вручную скачать любые голоса из официального репозитория [rhasspy/piper-voices на Hugging Face](https://huggingface.co/rhasspy/piper-voices/tree/main).
+Для добавления модели поместите два файла в директорию `voices/`:
+- `ru_RU-<имя>-medium.onnx`
+- `ru_RU-<имя>-medium.onnx.json`
 
----
+Они автоматически появятся в веб-интерфейсе.
 
-### 💻 Ручной запуск через консоль
+### Структура проекта
 
-```powershell
-# Запуск с созданием публичной ссылки (по умолчанию)
-.\.venv\Scripts\python.exe app.py --share
-
-# Запуск только локально (без публичной ссылки)
-.\.venv\Scripts\python.exe app.py --no-share
+```
+Piper-RU/
+|-- app.py              # Веб-интерфейс Gradio с переключением CPU/GPU и синтезом речи
+|-- start.bat           # Скрипт запуска в один клик под Windows
+|-- requirements.txt    # Зависимости Python (piper-tts, onnxruntime-gpu, gradio)
+|-- README.md           # Документация проекта (Русский / English)
+|-- .gitignore          # Исключения Git (.venv, кэш, аудио)
+`-- voices/             # Директория с моделями голосов (.onnx и .json)
 ```
 
----
+### Лицензия и первоисточники
 
-<br>
-
-<a name="-english"></a>
-## 🇬🇧 English
-
-A local web interface for neural text-to-speech (TTS) powered by **Piper** (**VITS** architecture + **ONNX Runtime**).
-
-Runs completely locally on your machine with zero cloud telemetry. Supports both **CPU** execution and hardware acceleration with **NVIDIA GPUs (CUDA)**.
-
-### ✨ Key Features
-* **1-Click Quickstart**: `start.bat` automatically creates an isolated `.venv`, installs requirements, and launches the app.
-* **CPU / GPU Toggle**: seamless runtime switching between CPU and NVIDIA CUDA right inside the UI.
-* **Gradio Public Share Link**: instantly share your running web UI over the internet or access it from mobile via a secure temporary `https://xxxx.gradio.live` link.
-* **On-Demand Voice Download**: selecting a new voice automatically fetches the required ONNX models from Hugging Face.
-* **Customizable Synthesis**: adjustable sliders for speaking rate, pitch variation (`noise_scale`), and phoneme duration variation (`noise_w_scale`).
+- Движок Piper TTS: [rhasspy/piper](https://github.com/rhasspy/piper) (MIT License).
+- Модели и датасеты голосов: [rhasspy/piper-voices](https://github.com/rhasspy/piper-voices) (Open Data Commons Public Domain Dedication and License / CC-BY / MIT).
 
 ---
 
-### 🚀 Quick Start
+## English
 
-Simply double-click:
+WebUI for local neural text-to-speech (TTS) synthesis powered by **Piper**, using the **VITS** architecture and **ONNX Runtime** with support for **CPU** inference and **GPU (NVIDIA CUDA)** hardware acceleration.
 
-```text
+### Key Features
+
+- **Voice Selection and Auto-download:**
+  - Preconfigured Russian voices: **Dmitri** (male), **Irina** (female), **Ruslan** (male), **Denis** (male).
+  - English voice: **Lessac** (female).
+  - Automatic download of model files (`.onnx` and `.onnx.json`) from Hugging Face upon selection.
+  - Support for any custom Piper voice model (over 170 voices in 40+ languages).
+- **Hardware Acceleration (CPU / GPU):**
+  - Inference support for **CPU** and **NVIDIA CUDA** GPUs via `onnxruntime-gpu`.
+  - On-the-fly device toggle in the interface with automatic CPU fallback when CUDA is unavailable.
+- **Fine-grained Synthesis Controls:**
+  - Speech rate adjustment.
+  - Intonation variability (`noise_scale`).
+  - Phoneme and pause length variability (`noise_w_scale`).
+- **Public Sharing:**
+  - Automatic Gradio public share link creation for remote access from mobile devices or external networks.
+- **One-Click Launch:**
+  - `start.bat` script for Windows with automatic `.venv` virtual environment setup, dependency installation, and default model download.
+
+### Quick Start (Windows)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Daler-Karimov/Piper-RU.git
+cd Piper-RU
+```
+
+2. Run the batch script:
+```cmd
 start.bat
 ```
+On first launch, the script will automatically create a `.venv` virtual environment, install all dependencies from `requirements.txt`, download the default Russian voice model (`ru_RU-dmitri-medium`), and open the WebUI in your default browser.
 
-The script will automatically:
-1. Verify Python installation (Python 3.9+ required).
-2. Set up an isolated virtual environment (`.venv`).
-3. Install dependencies from `requirements.txt`.
-4. Download the default Russian voice model (`ru_RU-dmitri-medium`) if missing.
-5. Launch the server, generate a **public Gradio URL** (`https://xxxx.gradio.live`), and open the local interface in your browser.
-
----
-
-### 🗂️ Project Structure
-
-```text
-Piper/
-├── start.bat          # Launch & auto-setup script for Windows
-├── app.py             # Gradio web interface implementation
-├── requirements.txt   # Python dependencies (piper-tts, onnxruntime-gpu, gradio)
-├── README.md          # Project documentation (RU / EN)
-├── .venv/             # Isolated Python virtual environment
-└── voices/            # Voice model directory (.onnx and .json)
-    ├── ru_RU-dmitri-medium.onnx
-    ├── ru_RU-dmitri-medium.onnx.json
-    └── ...
+3. The WebUI is accessible locally and via public share link:
+```
+Local URL:  http://127.0.0.1:7860
+Public URL: https://xxxx.gradio.live (displayed in the console window)
+```
+To run locally only (without public share link):
+```cmd
+start.bat --no-share
 ```
 
----
+### Model Specifications and Performance
 
-### 🗣️ Supported Voices
+- **Architecture:** VITS (Variational Inference with adversarial learning for end-to-end Text-to-Speech).
+- **Format:** ONNX (FP32).
+- **Parameters:** ~28-30 million parameters (Medium quality).
+- **Model Size:** ~60-65 MB per voice model.
+- **Memory Footprint:** ~150-300 MB RAM / VRAM.
+- **Generation Speed:** ~0.05-0.15s per sentence (RTF < 0.05 on modern NVIDIA GPUs).
 
-Preconfigured in the UI:
-* **Russian voices**:
-  * `ru_RU-dmitri-medium` (male)
-  * `ru_RU-irina-medium` (female)
-  * `ru_RU-ruslan-medium` (male)
-  * `ru_RU-denis-medium` (male)
-* **English voices**:
-  * `en_US-lessac-medium` (female)
+### Adding Custom Voices
 
-> 💡 **Adding more voices:** download any of the 170+ voices across 40+ languages from [rhasspy/piper-voices on Hugging Face](https://huggingface.co/rhasspy/piper-voices/tree/main). Simply place both files (`.onnx` and `.onnx.json`) into the `voices/` directory.
+You can manually download additional voices from the official [rhasspy/piper-voices Hugging Face repository](https://huggingface.co/rhasspy/piper-voices/tree/main).
+To add a model, place both files into the `voices/` directory:
+- `<model-name>.onnx`
+- `<model-name>.onnx.json`
 
----
+They will be automatically recognized and available in the web interface.
 
-### 💻 Manual Command Line Launch
+### Project Structure
 
-```powershell
-# Run with a public Gradio tunnel (default)
-.\.venv\Scripts\python.exe app.py --share
-
-# Run locally only (no public tunnel)
-.\.venv\Scripts\python.exe app.py --no-share
 ```
+Piper-RU/
+|-- app.py              # Gradio WebUI with CPU/GPU toggle and speech synthesis
+|-- start.bat           # One-click Windows launch script
+|-- requirements.txt    # Python dependencies (piper-tts, onnxruntime-gpu, gradio)
+|-- README.md           # Project documentation (Russian / English)
+|-- .gitignore          # Git ignore rules (.venv, cache, audio files)
+`-- voices/             # Directory for voice models (.onnx and .json)
+```
+
+### License and Credits
+
+- Piper TTS engine: [rhasspy/piper](https://github.com/rhasspy/piper) (MIT License).
+- Voice models and datasets: [rhasspy/piper-voices](https://github.com/rhasspy/piper-voices) (Open Data Commons Public Domain Dedication and License / CC-BY / MIT).

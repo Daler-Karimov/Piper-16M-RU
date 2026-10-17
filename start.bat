@@ -43,14 +43,18 @@ if not exist voices\ru_RU-dmitri-medium.onnx (
 echo Voice models ready.
 
 rem 4. Launch app using .venv Python
-echo [3/3] Starting web server with Public Share link...
+echo [3/3] Starting web server...
 echo.
 echo ===================================================
 echo   Press Ctrl+C or close this window to stop.
 echo ===================================================
 echo.
 
-.venv\Scripts\python.exe app.py --share
+if "%~1"=="" (
+    .venv\Scripts\python.exe app.py --share
+) else (
+    .venv\Scripts\python.exe app.py %*
+)
 
 if errorlevel 1 (
     echo.

@@ -149,7 +149,7 @@ def synthesize_text(
         voice.synthesize_wav(text, wav_file, syn_config=syn_config)
 
     elapsed = time.time() - t0
-    status = f"✅ Готово за **{elapsed:.2f} сек.** | Устройство: **{actual_device}** | Модель: `{VOICE_CATALOG[voice_key]['id']}`"
+    status = f"Готово за **{elapsed:.2f} сек.** | Устройство: **{actual_device}** | Модель: `{VOICE_CATALOG[voice_key]['id']}`"
     return str(output_path), status
 
 cuda_ready = is_cuda_available()
@@ -159,7 +159,7 @@ initial_device = "GPU (CUDA)" if cuda_ready else "CPU"
 with gr.Blocks(title="Piper TTS Local Web UI") as demo:
     gr.Markdown(
         """
-        # 🎙️ Piper Local Text-to-Speech (VITS + ONNX)
+        # Piper Local Text-to-Speech (VITS + ONNX)
         Быстрый локальный синтез речи с поддержкой вычислений на **CPU** и **GPU (CUDA)**.
         """
     )
@@ -188,7 +188,7 @@ with gr.Blocks(title="Piper TTS Local Web UI") as demo:
                     info="CUDA доступна (NVIDIA RTX)" if cuda_ready else "CUDA не обнаружена",
                 )
 
-            with gr.Accordion("⚙️ Дополнительные настройки", open=False):
+            with gr.Accordion("Дополнительные настройки", open=False):
                 speed_slider = gr.Slider(
                     label="Скорость речи",
                     minimum=0.5,
@@ -211,7 +211,7 @@ with gr.Blocks(title="Piper TTS Local Web UI") as demo:
                     step=0.05,
                 )
 
-            btn_submit = gr.Button("▶ Озвучить", variant="primary", size="lg")
+            btn_submit = gr.Button("Озвучить", variant="primary", size="lg")
 
             gr.Examples(
                 examples=[
