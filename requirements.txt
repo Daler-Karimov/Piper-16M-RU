@@ -1,0 +1,4 @@
+piper-tts>=1.8.0
+onnxruntime-gpu>=1.23.0
+gradio>=6.0.0
+pathvalidate
