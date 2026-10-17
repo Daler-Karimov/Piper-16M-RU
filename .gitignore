@@ -16,6 +16,7 @@ voices/*.onnx
 voices/*.wav
 
 # IDE & OS
+.gradio/
 .vscode/
 .idea/
 .DS_Store

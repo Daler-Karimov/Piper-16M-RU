@@ -240,4 +240,17 @@ with gr.Blocks(title="Piper TTS Local Web UI") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", inbrowser=True, theme=gr.themes.Soft())
+    import argparse
+    parser = argparse.ArgumentParser(description="Piper TTS Gradio Web UI")
+    parser.add_argument("--share", action="store_true", default=True, help="Создать публичную ссылку Gradio (.gradio.live)")
+    parser.add_argument("--no-share", action="store_false", dest="share", help="Отключить публичную ссылку (только локально)")
+    parser.add_argument("--port", type=int, default=None, help="Порт сервера (по умолчанию динамический)")
+    args = parser.parse_args()
+
+    demo.launch(
+        server_name="0.0.0.0" if args.share else "127.0.0.1",
+        server_port=args.port,
+        share=args.share,
+        inbrowser=True,
+        theme=gr.themes.Soft(),
+    )
